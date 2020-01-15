@@ -9,9 +9,13 @@ printf("Woah, were jumping to 0x%x !\n", get_return_address());
 On taking a look at the disassembly of the vuln() function , we can clearly see that the input we give gets stored on to the buffer at [ebp-0x48]
 
 ``` assembly
-8048674:       8d 45 b8                lea    eax,[ebp-0x48]
-8048677:       50                      push   eax
-8048678:       e8 b3 fd ff ff          call   8048430 <gets@plt>
+ 0x08048671 <+18>:    sub    esp,0xc
+ 0x08048674 <+21>:    lea    eax,[ebp-0x48]
+ 0x08048677 <+24>:    push   eax
+ 0x08048678 <+25>:    call   0x8048430 <gets@plt>
+ 0x0804867d <+30>:    add    esp,0x10
+ 0x08048680 <+33>:    call   0x8048714 <get_return_address>
+
 ```
 So we need to give an input of 0x48 bytes + 0x4 bytes (to override the saved ebp) + 0x4 bytes (to override the saved eip)
 
