@@ -23,7 +23,7 @@ From the disassembly of the vuln function we can see that the buffer is at addre
    0x00000000004007e7 <+27>:    ret    
 
 ```
-So, we input 0x40 bytes to get to rbp & 0x8 bytes to override rbp + 0x6 bytes to override rip(so we avoid raising an excption)
+So, we input 0x40 bytes to get to rbp & 0x8 bytes to override rbp + 0x6 bytes to override rip(so we avoid raising an exception)
 
 now, load up gdb and try out your exploit.
 
@@ -64,10 +64,23 @@ After setting a breakpoint at flag() in gdb ,we see that our exploit did actuall
 
 ```
 lets continue execution till the segfault
+
 ```gdb
   Stopped reason: SIGSEGV
   buffered_vfprintf (s=s@entry=0x7ffff7fa76a0 <_IO_2_1_stdout_>, format=format@entry=0x7fffffffdee8 "flag{A_n3w_0v3rflow}\n", args=args@entry=0x7fffffffde08, mode_flags=mode_flags@entry=0x0) at vfprintf-internal.c:2377
   2377    vfprintf-internal.c: No such file or directory.
 ```
+Ok .. so we ended up messing the stack alignment with our payload, we have to make sure that rsp is 16-bit aligned when we enter into the flag function.
+The simple fix for this is to use a ret ROPgadget ,it executes a ret instruction right before the jump to flag() which helps align the rsp register.
 
-**############################################Incomplete ############################################**
+lets add this to our exploit and run it.
+```bash
+[+] Starting local process './vuln': pid 12338
+Welcome to 64-bit. Give me a string that gets you the flag: 
+
+[*] Switching to interactive mode
+flag{A_n3w_0v3rflow}
+```
+
+there we go..!
+
