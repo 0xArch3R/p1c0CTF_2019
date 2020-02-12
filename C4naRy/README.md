@@ -3,7 +3,7 @@
 Ooh ... this one seems pretty fun
 
 The binary in this challenge seems to have a **stack canary** and so, trying to simply overflow this buffer wont be easy as we are greeted with this message every time we corrupt the value of the canary with our input.
-```
+``` bash
 arch3r@1nv4d3r:~/p1c0CTF_2019/C4naRy$ ./vuln
 Please enter the length of the entry:
 > 33
