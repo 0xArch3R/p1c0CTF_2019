@@ -1,14 +1,4 @@
----
-title: The Bards' Fail
-date: 2020-09-15 20:05:10
-author: Pwn-Solo
-author_url: https://twitter.com/Pwn_Solo
-categories:
-  - Pwn
-tags:
-  - CSAW Quals
-  - Stack Overflow
----
+# The Bards' Fail
 
 **tl;dr**
 + Carefully arranging structs on stack so as to overwrite saved rip , without corrupting the stack canary.
